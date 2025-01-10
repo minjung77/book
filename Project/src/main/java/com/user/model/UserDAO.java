@@ -123,6 +123,7 @@ public class UserDAO {
 		
 	}  // closeConn() 메서드 end
 	
+	// 로그인 메서드
 	public UserDTO login(String user_id, String user_pwd) {
 		
 			openConn();
@@ -161,7 +162,70 @@ public class UserDAO {
 		
 		return dto;
 	}
+	
+	// 회원가입 하는 메서드
+	public boolean registerUser(UserDTO user) {
+		
+		Boolean result= false;
+		
+		openConn();
+		
+		 sql = "INSERT INTO users (user_id, user_name, password, email, phone, address, grade, money) "
+                 + "VALUES (?, ?, ?, ?, ?, ?, 1, 0)";
+		
+		 try {
+			pstmt=con.prepareStatement(sql);
+			
+			  // PreparedStatement에 값 설정
+            pstmt.setString(1, user.getUser_id());
+            pstmt.setString(2, user.getUser_name());
+            pstmt.setString(3, user.getPassword());
+            pstmt.setString(4, user.getEmail());
+            pstmt.setString(5, user.getPhone());
+            pstmt.setString(6, user.getAddress());
+            
+            int resultCount = pstmt.executeUpdate();
 
+            // 결과 확인
+            if (resultCount > 0) {
+                result = true; // 성공
+            }
+            
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConn(pstmt, con);
+		} return result;
+	}
+	
+	public boolean checkUserIdExists(String userId) {
+	    boolean exists = false;
+	    int count = 0;
+
+	    try {
+	        openConn();
+	        String sql = "SELECT COUNT(*) FROM users WHERE user_id = ?";
+	        pstmt = con.prepareStatement(sql);  // pstmt 초기화
+	        pstmt.setString(1, userId);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	            if (count > 0) {
+	                exists = true; // 중복 아이디 존재
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeConn(rs, pstmt, con);
+	    }
+	    return exists;
+	}
+
+	
+	
 	
 
 }

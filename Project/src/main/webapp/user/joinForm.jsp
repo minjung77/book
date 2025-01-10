@@ -46,12 +46,13 @@
 </style>
 </head>
 <body>
+<%@ include file="navbar.jsp" %>
 	<div class="container mt-5">
 		<div class="row justify-content-center">
 			<div class="col-lg-6">
 				<div class="input-form">
 					<h4 class="mb-4 text-center">회원가입</h4>
-					<form method="post" action="joinPro" name="userInfo" onsubmit="return checkValue()">
+					<form method="post" action="<%=request.getContextPath() %>/user_join_ok.go" name="userInfo" onsubmit="return checkValue()">
 					
 						<div class="mb-3">
 						    <label for="memberId" class="form-label">아이디</label>
@@ -109,38 +110,76 @@
 	<%@ include file="footer.jsp" %>
 	
 	<script>
-function checkId() {
+	unction checkId() {
+	    const memberId = document.getElementById('memberId').value;
+	    const idchk = document.getElementById('idchk');
+
+	    if (!memberId) {
+	        idchk.textContent = "아이디를 입력해주세요.";
+	        idchk.style.color = "red";
+	        return;
+	    }
+
+	    fetch('checkId', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify({ memberId: memberId }),
+	    })
+	        .then((response) => response.json())
+	        .then((data) => {
+	            if (data.isAvailable) {
+	                idchk.textContent = "사용 가능한 아이디입니다.";
+	                idchk.style.color = "green";
+	            } else {
+	                idchk.textContent = "이미 사용 중인 아이디입니다.";
+	                idchk.style.color = "red";
+	            }
+	        })
+	        .catch((error) => {
+	            console.error('Error:', error);
+	            idchk.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+	            idchk.style.color = "red";
+	        });
+	}
+
+function checkValue() {
+    const memberPw = document.getElementById('memberPw').value;
+    const memberPwChk = document.getElementById('memberPwChk').value;
+    const memberEmail = document.getElementById('memberEmail').value;
     const memberId = document.getElementById('memberId').value;
     const idchk = document.getElementById('idchk');
+    const memberName = document.getElementById('memberName').value;
+    const memberPhone = document.getElementById('memberPhone').value;
+    const memberAddress = document.getElementById('memberAddress').value;
 
-    if (!memberId) {
-        idchk.textContent = "아이디를 입력해주세요.";
-        idchk.style.color = "red";
-        return;
+    // 비밀번호 확인
+    if (memberPw !== memberPwChk) {
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        return false;
     }
 
-    fetch('checkId', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ memberId: memberId }),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.isAvailable) {
-                idchk.textContent = "사용 가능한 아이디입니다.";
-                idchk.style.color = "green";
-            } else {
-                idchk.textContent = "이미 사용 중인 아이디입니다.";
-                idchk.style.color = "red";
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            idchk.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
-            idchk.style.color = "red";
-        });
+    // 필수 항목 체크
+    if (!memberId || !memberName || !memberPw || !memberEmail || !memberAddress) {
+        alert("모든 필드를 작성해 주세요.");
+        return false;
+    }
+
+    // 이메일 형식 체크
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(memberEmail)) {
+        alert("올바른 이메일 주소를 입력해주세요.");
+        return false;
+    }
+
+    // 전화번호 형식 체크 (옵션)
+    if (memberPhone && !/^\d{3}-\d{3,4}-\d{4}$/.test(memberPhone)) {
+        alert("전화번호 형식이 올바르지 않습니다.");
+        return false;
+    }
+
+    return true;
 }
 </script>
 </body>

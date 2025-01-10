@@ -113,9 +113,15 @@
 
             <!-- 로그인, 회원가입, 마이페이지 항목을 오른쪽에 배치 -->
             <div class="navbar-nav right-nav">
-                <!-- 로그인 버튼을 a 태그로 변경하고 클래스 추가 -->
-                <a href="login.jsp" class="nav-item nav-link text-uppercase fw-bold px-3">로그인</a>
-                <a href="joinForm.jsp" class="nav-item nav-link">회원가입</a>
+                <!-- 로그인 상태에 따라 로그인/회원명 표시 -->
+                <% String userName = (String) session.getAttribute("userName"); %>
+                <% if (userName != null) { %>
+                    <span class="nav-item nav-link text-uppercase fw-bold px-3">안녕하세요, <%= userName %>님</span>
+                    <a href="logout.jsp" class="nav-item nav-link">로그아웃</a>
+                <% } else { %>
+                    <a href="login.jsp" class="nav-item nav-link text-uppercase fw-bold px-3">로그인</a>
+                    <a href="joinForm.jsp" class="nav-item nav-link">회원가입</a>
+                <% } %>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">마이페이지</a>
                     <div class="dropdown-menu m-0">

@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-
+<%@ include file="../user/navbar.jsp" %>
 <div class="login-container">
     <h2>로그인</h2>
 
@@ -47,7 +47,7 @@
         <button type="submit" class="btn btn-primary w-100">로그인</button>
     </form>
 </div>
-
+<%@ include file="../user/footer.jsp" %>
 <script src="${pageContext.request.contextPath}/resource/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
