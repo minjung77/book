@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>01_Servlet</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 서블릿 매핑 방법  -->
+  <servlet>
+  <servlet-name>aaa</servlet-name>
+  <servlet-class>basic.Adder1Servlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  <servlet-name>aaa</servlet-name>
+  <url-pattern>/adder1</url-pattern>
+  
+  </servlet-mapping>
+  
+  
+  <!-- 
+  	-web.xml 파일을 배포 서술자라고 함.
+  	- 하나의 웹 어플리케이션에 대한 배치를 기술한 것이기 때문에
+  	  각각의 웹 어플리케이션마다 하나의 배포 서술자가 필요함.
+  	- web.xml 파일은 url 경로와 해당 경로의 요청을 처리하는
+  	  서블릿 사이에 매핑을 정의하는 곳임. 웹 서버는 이 구성을 
+  	  사용하여 특정한 요청을 처리할 서블릿을 식별하고 요청 메서드에
+  	  해당하는 클래스를 호철을 하게 됨.
+  	   
+   -->
+  
+  
+  
+  
+  
+  
+</web-app>
