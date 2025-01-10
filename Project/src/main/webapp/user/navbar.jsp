@@ -114,15 +114,13 @@
             <!-- 로그인, 회원가입, 마이페이지 항목을 오른쪽에 배치 -->
             <div class="navbar-nav right-nav">
                 <!-- 로그인 버튼을 a 태그로 변경하고 클래스 추가 -->
-                <a href="#" class="nav-item nav-link text-uppercase fw-bold px-3" data-bs-toggle="modal" data-bs-target="#loginModal">로그인</a>
+                <a href="login.jsp" class="nav-item nav-link text-uppercase fw-bold px-3">로그인</a>
                 <a href="joinForm.jsp" class="nav-item nav-link">회원가입</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">마이페이지</a>
                     <div class="dropdown-menu m-0">
                         <a href="mypage.jsp" class="dropdown-item">회원정보</a>
                         <a href="cart.jsp" class="dropdown-item">장바구니</a>
-                       
-                     
                     </div>
                 </div>
                 <a href="orderConfirmation.jsp" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">주문하기 <i class="bi bi-arrow-right"></i></a>
@@ -131,96 +129,6 @@
     </nav>
  <!-- Navbar End -->
 
- <!-- 로그인 모달 시작 -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">로그인</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="was-validated">
-                    <div class="mb-3">
-                        <label for="memberId" class="form-label">아이디</label>
-                        <input type="text" class="form-control form-control-sm" id="memberId" placeholder="아이디를 입력하세요" required>
-                        <div class="invalid-feedback">아이디를 입력해주세요.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="memberPw" class="form-label">비밀번호</label>
-                        <input type="password" class="form-control form-control-sm" id="memberPw" placeholder="비밀번호를 입력하세요" required>
-                        <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm w-100">로그인</button>
-                </form>
-                <div class="text-center mt-3">
-                    <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">비밀번호를 잊으셨나요?</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 로그인 모달 끝 -->
-
-<!-- 비밀번호 재설정 모달 시작 -->
-<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="resetPasswordModalLabel">비밀번호 재설정</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="resetPasswordForm" class="was-validated">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">등록된 이메일</label>
-                        <input type="email" class="form-control form-control-sm" id="email" placeholder="이메일을 입력하세요" required>
-                        <div class="invalid-feedback">이메일을 입력해주세요.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newPassword" class="form-label">새 비밀번호</label>
-                        <input type="password" class="form-control form-control-sm" id="newPassword" placeholder="새 비밀번호를 입력하세요" required>
-                        <div class="invalid-feedback">새 비밀번호를 입력해주세요.</div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm w-100">비밀번호 재설정</button>
-                </form>
-                <div class="text-center mt-3" id="resetMessage" style="display: none;">
-                    <p id="messageText"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 비밀번호 재설정 모달 끝 -->
-
-<script>
-    // 비밀번호 재설정 처리
-    document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        var email = document.getElementById('email').value;
-        var newPassword = document.getElementById('newPassword').value;
-        
-        // 서버와 이메일을 비교하는 로직을 추가해야 합니다.
-        // 여기서는 이메일이 "example@example.com"일 때 비밀번호를 재설정 가능하도록 예시를 듬
-        var storedEmail = "example@example.com"; // 실제로는 서버에서 가져와야 합니다.
-
-        if (email === storedEmail) {
-            // 이메일이 일치하면 비밀번호를 변경하는 로직
-            // 예: 서버에 비밀번호 변경 요청을 보낸다.
-
-            document.getElementById('resetPasswordForm').reset(); // 입력 폼 초기화
-            document.getElementById('resetMessage').style.display = 'block';
-            document.getElementById('messageText').innerText = '비밀번호가 성공적으로 변경되었습니다.';
-        } else {
-            document.getElementById('resetMessage').style.display = 'block';
-            document.getElementById('messageText').innerText = '등록된 이메일이 아닙니다.';
-        }
-    });
-</script>
-<!-- 로그인 모달 끝 -->
-
-<!-- Add Bootstrap JS and Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
