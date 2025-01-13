@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+.main{
+	display: flex;
+	align-items: center;
+}
+
+.sideBar{
+	margin-left: 50px;
+	margin-top: 200px;
+	margin-right: 30px;
+	height: 700px;
+}
+.firstPage{
+	background-color: #f0f0f0; /* 구분 위한 색 설정 */
+/* 
+    padding: 10px;
+   	display: flex;
+	align-items: center;
+    height: 100vh; 섹션 높이를 뷰포트 전체로 설정
+    justify-content: center;
+ */
+  flex: 1;
+  text-align: center;
+}
+.ad_header, .ad_footer{
+	background-color: #2C3857;
+	height: 150px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.ad_header h3{
+	color: white;
+}
+.ad_footer{
+	color: #d5d5d5;
+}
+
+.book_insert{
+	text-align: center;
+	margin: 0 auto;
+	width: 750px;
+	padding-right: 100px;
+}
+
+.book_insert table{
+	
+}
+.title{
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.user_select table th,td{
+	min-width: 130px;
+	text-align: center;
+}
+.user_select table th{
+	background-color: #89bd6a;
+}
+
+.firstmain{
+    display: flex; /* Flexbox 활성화 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    height: 100vh; /* 부모 높이를 뷰포트 전체 높이로 설정 */
+}
+
+a{
+	text-decoration: none;
+}
+.userSearch{/* 관리자-회원정보 하단 검색 창 */
+	
+}
+.bookModify table th{
+	background-color: #89bd6a;
+	min-width: 130px;
+	text-align: center;
+}
+.bookModify img{
+	height: 100px;
+	width: 30px;
+}
+section{
+	margin-top: -200px;
+}
+.user_orders th{
+	background-color: #89bd6a;
+	min-width: 130px;
+	text-align: center;
+}
