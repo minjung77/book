@@ -198,7 +198,7 @@ public class UserDAO {
 			closeConn(pstmt, con);
 		} return result;
 	}
-	
+	// 아이디 중복 체크 메서드
 	public boolean checkUserIdExists(String userId) {
 	    boolean exists = false;
 	    int count = 0;
@@ -223,9 +223,68 @@ public class UserDAO {
 	    }
 	    return exists;
 	}
+	//  회원 정보 변경 메서드
+	public int updateUserInfo(UserDTO dto) {
+	    int result = 0;
+	    
+	    try {
+	        openConn();
+	        
+	        String sql = "UPDATE users SET user_name = ?, password = ?, email = ?, phone = ? WHERE user_id = ?";
+	        
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, dto.getUser_name());
+	        
+	        // 비밀번호가 null이 아니면 업데이트, null이면 기존 비밀번호 유지
+	        if (dto.getPassword() != null) {
+	            pstmt.setString(2, dto.getPassword());
+	        } else {
+	            pstmt.setNull(2, java.sql.Types.VARCHAR); // 비밀번호 업데이트 안 함
+	        }
+	        
+	        // 파라미터 바인딩
+	        
+	        pstmt.setString(3, dto.getEmail());
+	        pstmt.setString(4, dto.getPhone());
+	        pstmt.setString(5, dto.getUser_id());
+	        
+	        System.out.println(dto.getEmail()+"/"+dto.getPhone()+"/"+dto.getUser_id()+"/"+dto.getUser_name()+"/"+dto.getPassword());
+	        
+	        result = pstmt.executeUpdate();
+	        
+	        
+	        
+	    } catch (SQLException e) {
+	    	System.err.println("회원 수정 에러 :: " + e.getMessage());
+	        // 예외 로그 기록 (로그 파일을 사용하는 경우)
+	        e.printStackTrace();  // 개발 중에는 이 방법 사용
+	    } finally {
+	        // 리소스 닫기
+	        closeConn(pstmt, con);
+	    }
+	    System.out.println("result 값 ::: " + result);
+	    return result;
+	}
+	// 회원 수정 메서드
+	public int deleteUser(String userId) {
+	    openConn();  // 데이터베이스 연결을 시작
 
-	
-	
+	    int result = 0;
+
+	    try {
+	        String sql = "DELETE FROM users WHERE user_id = ?";
+	        
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, userId);  // userId를 바인딩
+	        result = pstmt.executeUpdate();  // 실행 후 영향을 받은 행 수 반환
+	    } catch (Exception e) {
+	        e.printStackTrace();  // 예외 처리
+	    } finally {
+	        closeConn(pstmt, con);  // 리소스 정리
+	    }
+
+	    return result;  // 삭제된 행 수 반환
+	}
 	
 
 }
