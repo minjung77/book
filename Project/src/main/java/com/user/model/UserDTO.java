@@ -1,6 +1,13 @@
 package com.user.model;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private String user_id;      // 사용자 ID
 	private String user_name;    // 사용자 이름

@@ -28,12 +28,12 @@ public class BookDeleteAction implements Action {
 			out.println("<script>");
 			out.println("alert('책이 삭제되었습니다.')");
 			out.println("location.href='book_modify.go'");
-			out.println("</script");
+			out.println("</script>");
 		}else {
 			out.println("<script>");
 			out.println("alert('책 삭제에 실패하였습니다.')");
 			out.println("history.back()");
-			out.println("</script");
+			out.println("</script>");
 		}
 		
 		return null;

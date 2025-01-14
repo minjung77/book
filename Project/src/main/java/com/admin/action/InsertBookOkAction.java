@@ -46,29 +46,14 @@ public class InsertBookOkAction implements Action {
 		if(image_file!=null) {//이미지 파일이 있으면
 			String fileName = image_file.getName();
 			
-			Calendar cal = Calendar.getInstance();
-			
-			int year = cal.get(Calendar.YEAR);
-			int month = cal.get(Calendar.MONTH)+1;
-			int day = cal.get(Calendar.DAY_OF_MONTH);
-			
-			String homedir = saveFolder+"/"+year+"-"+month+"-"+day;
-			
-			//saveFolder/날짜 에 해당하는 파일 객체 생성
-			File path1 = new File(homedir);
-			
-			if(!path1.exists()) {
-				path1.mkdir();//폴더가 존재하지 않으면 폴더 생성
-			}
-		
 			//파일 명 : 책 제목_파일명
 			String reFileName = title + "_" + fileName;
 
 			//파일을 새로운 경로로 이동시키는 동시게 파일 이름을 변경(renameTo("파일이름")))
-			image_file.renameTo(new File(homedir+"/"+reFileName));
+			image_file.renameTo(new File(saveFolder+"/"+reFileName));
 			
 			//DB에 들어갈 파일 이름/[/2024-12-27/책이름-파일이름]
-			String fileDBName = "/" +year+ "-" +month + "-" + day + "/" + reFileName;
+			String fileDBName = "/" + reFileName;
 			
 			dto.setImage_url(fileDBName);
 		}
@@ -98,8 +83,6 @@ public class InsertBookOkAction implements Action {
 			out.println("location.href='book_insert.go'");
 			out.println("</script>");
 		}
-		
 		return null;
 	}
-
 }

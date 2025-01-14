@@ -33,25 +33,31 @@
 </head>
 <body>
 <div class="container mt-5">
- <h6 class="text-primary text-uppercase text-center">mypage</h6>
+    <h6 class="text-primary text-uppercase text-center">mypage</h6>
     <h1 class="text-center mb-4">마이페이지</h1>
     <div class="row">
         <!-- 회원 정보 섹션 -->
         <div class="col-md-4">
             <div class="profile-card">
                 <h4 class="section-title">회원 정보</h4>
-                <c:if test="${not empty dto}">
-                    <p><strong>이름:</strong> ${dto.memberName}</p>
-                    <p><strong>이메일:</strong> ${dto.memberEmail}</p>
-                    <p><strong>전화번호:</strong> ${dto.memberPhone}</p>
-                </c:if>
-                <c:if test="${empty dto}">
-                    <p>회원 정보가 존재하지 않습니다.</p>
-                </c:if>
-
+                <!-- 세션에 저장된 user 정보 확인 -->
+               <c:if test="${not empty sessionScope.user}">
+			    <p><strong>이름:</strong> ${sessionScope.user.user_name}</p>
+			    <p><strong>이메일:</strong> ${sessionScope.user.email}</p>
+			    <p><strong>전화번호:</strong> ${sessionScope.user.phone}</p>
+			</c:if>
+			
+			<c:if test="${empty sessionScope.user}">
+			    <p>로그인 정보가 없습니다. 로그인 해주세요.</p>
+			    <a href="login.jsp">로그인 페이지로 이동</a>
+			</c:if>
+                
                 <div class="btn-container">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">정보 변경</button>
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">회원 탈퇴</button>
+              
+				<a href="<%=request.getContextPath() %>/user/updatePage.jsp" class="btn btn-danger btn-sm">정보 변경</a>
+			<a href="<%=request.getContextPath() %>/user/deletePage.jsp" class="btn btn-danger btn-sm">회원 탈퇴</a>
+			
+                    
                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#depositModal">돈 예치</button>
                 </div>
             </div>
@@ -61,27 +67,28 @@
         <div class="col-md-8">
             <div class="profile-card">
                 <h4 class="section-title">주문 내역</h4>
+                <!-- 주문 내역 내용 -->
                 <c:if test="${not empty orderList}">
                     <table class="table table-bordered">
                         <thead class="table-light">
-                        <tr>
-                            <th>주문 날짜</th>
-                            <th>주문 번호</th>
-                            <th>수령인</th>
-                            <th>주문 상품</th>
-                            <th>총 금액</th>
-                        </tr>
+                            <tr>
+                                <th>주문 날짜</th>
+                                <th>주문 번호</th>
+                                <th>수령인</th>
+                                <th>주문 상품</th>
+                                <th>총 금액</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="order" items="${orderList}">
-                            <tr>
-                                <td>${order.bookDate}</td>
-                                <td>${order.bookNumber}</td>
-                                <td>${order.bookRecipt}</td>
-                                <td>${order.bookName}</td>
-                                <td>${order.bookTotal}</td>
-                            </tr>
-                        </c:forEach>
+                            <c:forEach var="order" items="${orderList}">
+                                <tr>
+                                    <td>${order.bookDate}</td>
+                                    <td>${order.bookNumber}</td>
+                                    <td>${order.bookRecipt}</td>
+                                    <td>${order.bookName}</td>
+                                    <td>${order.bookTotal}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </c:if>
@@ -92,7 +99,6 @@
         </div>
     </div>
 </div>
-
 <!-- 회원 정보 수정 모달 -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -102,7 +108,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="updateUserInfo" name="memberUpdateForm" onsubmit="return checkUpdateValues()">
+                <form action="<%=request.getContextPath() %>/user_updateUser_ok.go" method="post" name="memberUpdateForm" onsubmit="return checkUpdateValues()">
                     <div class="mb-3">
                         <label for="memberId" class="form-label">아이디</label>
                         <input type="text" class="form-control" id="memberId" name="memberId" value="${dto.memberId}" readonly>
@@ -115,10 +121,10 @@
                         <label for="memberPw" class="form-label">비밀번호</label>
                         <input type="password" class="form-control" id="memberPw" name="memberPw">
                     </div>
-                    <div class="mb-3">
+                   <!--  <div class="mb-3">
                         <label for="memberPwChk" class="form-label">비밀번호 확인</label>
                         <input type="password" class="form-control" id="memberPwChk" name="memberPwChk">
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         <label for="memberEmail" class="form-label">이메일</label>
                         <input type="email" class="form-control" id="memberEmail" name="memberEmail" value="${dto.memberEmail}" required>
@@ -181,13 +187,19 @@
 <script>
     function validateDeposit() {
         const depositAmount = document.getElementById('depositAmount').value;
+        const errorElement = document.querySelector('.deposit-error');
+
         if (depositAmount < 1000) {
-            alert("최소 예치 금액은 1,000원입니다.");
+            errorElement.textContent = "최소 예치 금액은 1,000원입니다.";
             return false;
         }
+
+        errorElement.textContent = ""; // 오류 메시지 초기화
         return true;
     }
 </script>
+
+
 <%@ include file="footer.jsp"%>
 </body>
 </html>

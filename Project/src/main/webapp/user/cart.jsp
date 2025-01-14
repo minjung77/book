@@ -12,10 +12,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style type="text/css">
+input[type=checkbox]{
+	transform:scale(2.0);
+	margin: 5px;
+}
+img{
+	width: 80px;
+	height: 100px;
+}
+</style>
 </head>
 <body>
-  <%@ include file="navbar.jsp" %>
+  	<%@ include file="navbar.jsp" %>
 
+	<c:set var="list" value="${cartList }"></c:set>
+	
 <!-- Jumbotron -->
 <div class="jumbotron py-5 text-center bg-light">
     <div class="container">
@@ -32,17 +44,18 @@
             <input type="checkbox" id="allChk" checked> <b>전체</b>
         </div>
         <div class="col-md-6 text-end">
-            <a href=" "class="btn btn-danger btn-sm">삭제하기</a>
-            <a href="orderConfirmation.jsp" class="btn btn-success btn-sm">주문하기</a>
+            <a href=" "class="btn btn-danger btn-sm" onclick="location.href='cartDelete.go'">삭제하기</a>
+            <a href="orderConfirmation.jsp" class="btn btn-success btn-sm" onclick="location.href='cartOrder.go'">주문하기</a>
         </div>
     </div>
-
+    
     <!-- Cart Table -->
     <div class="table-responsive mt-4">
         <table class="table table-hover">
             <thead class="table-secondary">
                 <tr>
-                    <th><input type="checkbox" id="allSelectChk" checked></th>
+                    <th></th>
+                    <th></th>
                     <th>상품</th>
                     <th>가격</th>
                     <th>수량</th>
@@ -51,21 +64,26 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="product" items="${cartlist}">
-                    <tr>
-                        <td><input type="checkbox" class="chk" checked></td>
-                        <td>${product.bookID} - ${product.bookName}</td>
-                        <td>${product.unitPrice}</td>
-                        <td>${product.quantity}</td>
-                        <td>${product.unitPrice * product.quantity}</td>
-                        <td>
-                            <a href="./removeCart.jsp?id=${product.bookID}" class="btn btn-outline-danger btn-sm">
-                                <i class="bi bi-backspace-fill"></i> 삭제
-                            </a>
-                        </td>
-                    </tr>
-                </c:forEach>
-                <c:if test="${empty cartlist}">
+            	<c:if test="${!empty cartList }">
+	                <c:forEach var="dto" items="${list}">
+	                    <tr>
+	                        <td><input type="checkbox" class="chk" checked data-totalprice="${dto.getQuantity() * dto.getPrice() }"></td>
+	                        <th style="text-align: center;">
+	                        	<img alt="책 이미지" src="../admin/${dto.getImage_url() }">
+	                        </th>
+	                        <td>${dto.getTitle() }</td>
+	                        <td>${dto.getPrice() }</td>
+	                        <td>${dto.getQuantity() }</td>
+	                        <td>${dto.getQuantity() * dto.getPrice() }</td>
+	                        <td>
+	                            <a href="./removeCart.jsp?id=${product.bookID}" class="btn btn-outline-danger btn-sm">
+	                                <i class="bi bi-backspace-fill"></i> 삭제
+	                            </a>
+	                        </td>
+	                    </tr>
+	                </c:forEach>
+            	</c:if>
+                <c:if test="${empty cartList}">
                     <tr>
                         <td colspan="6" class="text-center">장바구니가 비어 있습니다.</td>
                     </tr>
@@ -74,7 +92,7 @@
             <tfoot>
                 <tr>
                     <td colspan="3" class="text-end"><b>총액:</b></td>
-                    <td colspan="3">${cartlist.stream().mapToInt(p -> p.unitPrice * p.quantity).sum()}</td>
+                    <td colspan="3"><span id="totalMoney">0</span>원</td>
                 </tr>
             </tfoot>
         </table>
@@ -100,7 +118,31 @@
         document.querySelectorAll(".chk").forEach(chk => {
             chk.checked = isChecked;
         });
+        totalMoney();
     });
+    
+    function totalMoney() {
+    	console.log('전체 계산 진입');
+		let result = 0;
+		let checks = document.querySelectorAll('.chk');
+		
+		checks.forEach(checkBox => {
+			if(checkBox.checked){
+				result += parseInt(checkBox.getAttribute('data-totalprice'));
+			}
+		});
+		document.getElementById('totalMoney').textContent = result;
+	};
+	
+    window.addEventListener('load', () => {
+        totalMoney(); // 페이지 로드 후 초기 계산
+    });
+	
+	document.querySelectorAll('.chk').forEach(checkBox => {
+		console.log('선택 이벤트 진입');
+		checkBox.addEventListener('change', totalMoney);
+	});
+	/* ----------------------------함수 호출과 참조의 차이(함수참조)------------------------------- */
 </script>
 </body>
 </html>

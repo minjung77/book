@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>PET SHOP - Pet Shop Website Template</title>
+    <title>book detail page</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -165,34 +166,47 @@
             <div class="about-container">
                 <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded" src="../resource/img/about.jpg" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded" src="../admin${bookDetail.getImage_url() }" style="object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-7">
                     <div class="border-start border-5 border-primary ps-5 mb-5">
-                        <h6 class="text-primary text-uppercase">About Us</h6>
-                        <h1 class="display-5 text-uppercase mb-0">We Keep Your Pets Happy All Time</h1>
+                        <h6 class="text-primary text-uppercase">상세보기</h6>
+                        <h1 class="display-5 text-uppercase mb-0">${bookDetail.getTitle() }</h1>
                     </div>
-                    <h4 class="text-body mb-4">Diam dolor diam ipsum tempor sit. Clita erat ipsum et lorem stet no labore lorem sit clita duo justo magna dolore</h4>
+                    <h4 class="text-body mb-4">여기 뭐 넣어야하나?</h4>
                     <div class="bg-light p-4">
                         <ul class="nav nav-pills justify-content-between mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item w-50" role="presentation">
                                 <button class="nav-link text-uppercase w-100 active" id="pills-1-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-1" type="button" role="tab" aria-controls="pills-1"
-                                    aria-selected="true">책 소개</button>
+                                    aria-selected="true">줄거리</button>
                             </li>
                             <li class="nav-item w-50" role="presentation">
                                 <button class="nav-link text-uppercase w-100" id="pills-2-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-2" type="button" role="tab" aria-controls="pills-2"
-                                    aria-selected="false">저자 정보</button>
+                                    aria-selected="false">부가 정보</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
-                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna</p>
+                                <p class="mb-0">${bookDetail.getDescription() }</p>
                             </div>
                             <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
-                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna</p>
+                                <p class="mb-0" style="line-height: 40px;"> 
+                                	출판사 : ${bookDetail.getPublisher() }
+                                	<br>
+                                	발행일 : ${bookDetail.getPublish_date().substring(0,10) }
+                                	<br>
+                                	저 자 : ${bookDetail.getAuthor() }
+                                	<br>
+                                	장 르 : ${bookDetail.getGenre_id() }
+                                	<br>
+                                	가 격 : ${bookDetail.getPrice() }
+                                	<br>
+                                	수 량 : ${bookDetail.getQuantity() }
+                                	<br>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -202,25 +216,30 @@
     </div>
     <!-- About End -->
 
-    <!-- Quantity Selector and Action Buttons -->
-    <div class="container py-4">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="quantity-container">
-                    <button type="button" class="quantity-btn" id="decrease-btn">-</button>
-                    <div class="form-group">
-                        <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" />
-                    </div>
-                    <button type="button" class="quantity-btn" id="increase-btn">+</button>
-                </div>
-
-                <div class="btn-container">
-                    <a href="cart.jsp" class="btn btn-primary">장바구니 담기</a>
-                    <a href="checkout.jsp" class="btn btn-success">바로구매</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- 장바구니 & 바로구매 버튼 -->
+    <form action="cartAdd.go" method="post">
+    	<div class="container py-4">
+	        <div class="row">
+	            <div class="col-lg-12">
+	                <div class="quantity-container">
+	                    <button type="button" class="quantity-btn" id="decrease-btn">-</button>
+	                    <div class="form-group">
+	                        <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" max="${bookDetail.getQuantity() }"/>
+	                    </div>
+	                    <button type="button" class="quantity-btn" id="increase-btn">+</button>
+	                </div>
+	
+	                <div class="btn-container">
+				    	<input type="hidden" name="user_id" value="${sessionScope.user.getUser_id() }">
+				    	<input type="hidden" name="book_id" value="${bookDetail.getBook_id() }">
+				    	
+	                    <input type="submit" class="btn btn-primary" value="장바구니 담기">
+	                    <input type="button" class="btn btn-success" onclick="location.href='paynow.go'" value="바로구매">
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+    </form>
 <%@ include file="footer.jsp" %>
     <!-- Add Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

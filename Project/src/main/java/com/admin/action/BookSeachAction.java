@@ -15,12 +15,49 @@ public class BookSeachAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// 관리자 - 책 관리(모든 책)
+		// 관리자 - 책 관리(모든 책) & 페이징 처리
+		
+		//페이징 처리
+		int rowsize = 10;
+		int block = 5;
+		int totalRecode = 0;
+		int allPage = 0;
+		int page = 0;
+
+		if(request.getParameter("page")!=null) {//페이지 값이 0이라면 
+			page = Integer.valueOf(request.getParameter("page"));
+		}else {
+			page = 1;
+		}
+		int startNo=(page*rowsize)-(rowsize-1);
+		int endNo = (page*rowsize);
+		int startBlock = (((page-1)/block) * block) + 1;
+		int endBlock = (((page-1)/block) * block) + block;
 		
 		BookDAO dao = BookDAO.getInstance();
 		
-		List<BookDTO> list = dao.getBook();
+		//전체 게시물의 수를 확인.
+		totalRecode = dao.getBookCount();
+		allPage = (int)Math.ceil(totalRecode/(double)rowsize);
+		if(endBlock > allPage) {
+			endBlock = allPage;
+		}
 		
+		//현재 페이지에 해당하는 책 리스트를 가져옴.
+		List<BookDTO> list = dao.getBook(page, rowsize);
+		
+		//페이징 처리에 필요한 값 바인딩
+		request.setAttribute("page", page);
+		request.setAttribute("rowsize", rowsize);
+		request.setAttribute("block", block);
+		request.setAttribute("totalRecode", totalRecode);
+		request.setAttribute("allPage", allPage);
+		request.setAttribute("startNo", startNo);
+		request.setAttribute("endNo", endNo);
+		request.setAttribute("startBlock", startBlock);
+		request.setAttribute("endBlock", endBlock);
+		
+		//책 목록 바인딩
 		request.setAttribute("bookList", list);
 		
 		ActionForward f = new ActionForward();

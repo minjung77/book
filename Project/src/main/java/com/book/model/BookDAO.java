@@ -153,7 +153,7 @@ public class BookDAO {
 	        
 	        result = pstmt.executeUpdate();
 	    } catch (Exception e) {
-	        System.err.println(e.getMessage());
+	        System.err.println("책 저장 에러 ::: "+e.getMessage());
 	    } finally {
 	        closeConn(pstmt, con);
 	    }
@@ -174,25 +174,35 @@ public class BookDAO {
 			
 			if(rs.next()) result = rs.getInt(1)+1;
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			System.err.println("책 번호 출력 에러 ::: "+e.getMessage());
 		} finally {
 			closeConn(rs, pstmt, con);
 		}
 		return result;
 	}
 
-	//관리자 - 모든 책 검색
-	public List<BookDTO> getBook() {
+	//관리자 - 한 페이지에 정해진 목록만큼 조회
+	public List<BookDTO> getBook(int page, int rowsize) {
 		List<BookDTO> list = new ArrayList<BookDTO>();
+
+		int startNo=(page*rowsize)-(rowsize-1);
+		int endNo = (page*rowsize);
 		
 		try {
 			openConn();
 			
-			sql = "select * from books";
+			sql = "select * from ("
+					+ "    select row_number() over(order by book_id desc) as rnum, b.* from books b"
+					+ ")"
+					+ "where rnum between ? and ?";
 			
 			pstmt = con.prepareStatement(sql);
+
+			pstmt.setInt(1, startNo);
+			pstmt.setInt(2, endNo);
 			
 			rs = pstmt.executeQuery();
+			
 			while(rs.next()) {
 				BookDTO dto = new BookDTO();
 				dto.setBook_id(rs.getInt("book_id"));
@@ -233,11 +243,149 @@ public class BookDAO {
 			result = pstmt.executeUpdate();
 			
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			System.err.println("책 삭제 에러 ::: "+e.getMessage());
 		} finally {
 			closeConn(pstmt, con);
 		}
 		return result;
 	}
 
+	//책 검색
+	public List<BookDTO> searchBookList(String field, String keyword) {
+		List<BookDTO> list = new ArrayList<BookDTO>();
+		
+		try {
+			openConn();
+			
+			sql = "select * from books";
+			
+			if(field.equals("title")) {//검색 대상이 제목
+				sql += " where title like ?";
+			}else if(field.equals("description")) {//검색 대상이 줄거리
+				sql += " where description like ?";
+			}else if(field.equals("author")) {//검색 대상이 저자
+				sql += " where author like ?";
+			}
+			
+			sql += "order by book_id desc";
+			
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, "%"+keyword+"%");
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BookDTO dto = new BookDTO();
+				
+				dto.setBook_id(rs.getInt("book_id"));
+				dto.setTitle(rs.getString("title"));
+				dto.setAuthor(rs.getString("author"));
+				dto.setGenre_id(rs.getInt("genre_id"));
+				dto.setPublisher(rs.getString("publisher"));
+				dto.setDescription(rs.getString("description"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setPublish_date(rs.getString("publish_date"));
+				dto.setImage_url(rs.getString("image_url"));
+				dto.setQuantity(rs.getInt("quantity"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setInsertdate(rs.getString("insertdate"));
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			System.err.println("책 검색 조회 에러 ::: "+e.getMessage());
+		}
+		return list;
+	}
+
+	//전체 게시물의 수를 확인(페이징 처리)
+	public int getBookCount() {
+		int result = 0;
+		
+		try {
+			openConn();
+
+			sql = "select count(*) from books";
+			
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			System.err.println("전체 게시물의 수 조회 에러"+e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return result;
+	}
+
+	//관리자 - 책 수정
+	public int modifyBook(BookDTO dto) {
+		int result = 0;
+		
+		try {
+			openConn();
+			
+			sql = "update books set title=?,author=?,publisher=?,genre_id=?,description=?,price=?,publish_date=?,image_url=?,quantity=? where book_id=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getAuthor());
+			pstmt.setString(3, dto.getPublisher());
+			pstmt.setInt(4, dto.getGenre_id());
+			pstmt.setString(5, dto.getDescription());
+			pstmt.setInt(6, dto.getPrice());
+			pstmt.setString(7, dto.getPublish_date());
+			pstmt.setString(8, dto.getImage_url());
+			pstmt.setInt(9, dto.getQuantity());
+			
+			pstmt.setInt(10, dto.getBook_id());
+			
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.err.println("책 수정 에러 ::: " + e.getMessage());
+		} finally {
+			closeConn(pstmt, con);
+		}
+		return result;
+	}
+
+	//사용자 - 책 상세보기
+	public BookDTO getBookDetail(int book_id) {
+		BookDTO dto =null;
+		
+		try {
+			openConn();
+			
+			sql = "select * from books where book_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, book_id);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new BookDTO();
+				
+				dto.setBook_id(rs.getInt("book_id"));
+				dto.setTitle(rs.getString("title"));
+				dto.setAuthor(rs.getString("author"));
+				dto.setGenre_id(rs.getInt("genre_id"));
+				dto.setPublisher(rs.getString("publisher"));
+				dto.setDescription(rs.getString("description"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setPublish_date(rs.getString("publish_date"));
+				dto.setImage_url(rs.getString("image_url"));
+				dto.setQuantity(rs.getInt("quantity"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setInsertdate(rs.getString("insertdate"));
+			}
+		} catch (Exception e) {
+			System.err.println("사용자 책 상세보기 에러 ::: " + e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return dto;
+	}
 }

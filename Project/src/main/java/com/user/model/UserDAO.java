@@ -11,6 +11,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import com.book.model.BookDTO;
+
 public class UserDAO {
 
 	// DB와 연동하는 객체.
@@ -123,6 +125,7 @@ public class UserDAO {
 		
 	}  // closeConn() 메서드 end
 	
+
 	// 로그인 메서드
 	public UserDTO login(String user_id, String user_pwd) {
 		
@@ -198,7 +201,7 @@ public class UserDAO {
 			closeConn(pstmt, con);
 		} return result;
 	}
-	
+	// 아이디 중복 체크 메서드
 	public boolean checkUserIdExists(String userId) {
 	    boolean exists = false;
 	    int count = 0;
@@ -223,9 +226,296 @@ public class UserDAO {
 	    }
 	    return exists;
 	}
+	//  회원 정보 변경 메서드
+	public int updateUserInfo(UserDTO dto) {
+	    int result = 0;
+	    
+	    try {
+	        openConn();
+	        
+	        String sql = "UPDATE users SET user_name = ?, password = ?, email = ?, phone = ? WHERE user_id = ?";
+	        
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, dto.getUser_name());
+	        
+	        // 비밀번호가 null이 아니면 업데이트, null이면 기존 비밀번호 유지
+	        if (dto.getPassword() != null) {
+	            pstmt.setString(2, dto.getPassword());
+	        } else {
+	            pstmt.setNull(2, java.sql.Types.VARCHAR); // 비밀번호 업데이트 안 함
+	        }
+	        
+	        // 파라미터 바인딩
+	        
+	        pstmt.setString(3, dto.getEmail());
+	        pstmt.setString(4, dto.getPhone());
+	        pstmt.setString(5, dto.getUser_id());
+	        
+	        System.out.println(dto.getEmail()+"/"+dto.getPhone()+"/"+dto.getUser_id()+"/"+dto.getUser_name()+"/"+dto.getPassword());
+	        
+	        result = pstmt.executeUpdate();
+	        
+	        
+	        
+	    } catch (SQLException e) {
+	    	System.err.println("회원 수정 에러 :: " + e.getMessage());
+	        // 예외 로그 기록 (로그 파일을 사용하는 경우)
+	        e.printStackTrace();  // 개발 중에는 이 방법 사용
+	    } finally {
+	        // 리소스 닫기
+	        closeConn(pstmt, con);
+	    }
+	    System.out.println("result 값 ::: " + result);
+	    return result;
+	}
+	// 회원 수정 메서드
+	public int deleteUser(String userId) {
+	    openConn();  // 데이터베이스 연결을 시작
+
+	    int result = 0;
+
+	    try {
+	        String sql = "DELETE FROM users WHERE user_id = ?";
+	        
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, userId);  // userId를 바인딩
+	        result = pstmt.executeUpdate();  // 실행 후 영향을 받은 행 수 반환
+	    } catch (Exception e) {
+	        e.printStackTrace();  // 예외 처리
+	    } finally {
+	        closeConn(pstmt, con);  // 리소스 정리
+	    }
+
+	    return result;  // 삭제된 행 수 반환
+	}
+	
 
 	
-	
-	
 
+	//한 페이징 처리에 해당하는 회원 목록 조회
+	public List<UserDTO> getUsers(int page, int rowsize) {
+
+		List<UserDTO> list = new ArrayList<UserDTO>();
+		
+		int startNo=(page*rowsize)-(rowsize-1);
+		int endNo = (page*rowsize);
+		System.out.println("사용자 페이지 번호 ::: "+startNo + " / " + endNo);
+		 try {
+			openConn();
+			
+			sql = "select * from ("
+					+ "    select row_number() over(order by user_id desc) as rnum, u.* from users u"
+					+ ")"
+					+ "where rnum between ? and ?";
+			
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setInt(1, startNo);
+			pstmt.setInt(2, endNo);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				UserDTO dto = new UserDTO();
+				dto.setUser_id(rs.getString("user_id"));
+				dto.setUser_name(rs.getString("user_name"));
+				dto.setEmail(rs.getString("email"));
+				dto.setAddress(rs.getString("address"));
+				dto.setPassword(rs.getString("password"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setGrade(rs.getInt("grade"));
+				dto.setMoney(rs.getInt("money"));
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			System.err.println("관리자_회원목록 조회 에러::: " + e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return list;
+	}
+
+	//현재 페이지에 해당하는 사용자 목록
+	public int getUserCount() {
+		int result = 0;
+		try {
+			openConn();
+
+			sql = "select count(*) from users";
+			
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			System.err.println("전체 회원 목록 수 조회 에러"+e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return result;
+	}
+
+	//관리자 - 회원 삭제
+	public int deleteBook(String user_id) {
+		int result = 0;
+		
+		try {
+			openConn();
+			
+			sql = "delete from users where user_id = ?";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.err.println("회원 삭제 에러 ::: "+e.getMessage());
+		} finally {
+			closeConn(pstmt, con);
+		}
+		return result;
+	}
+
+	//관리자 - 사용자 수정 
+	public int updateUser(UserDTO dto) {
+		int result = 0;
+		
+		try {
+			openConn();
+			
+			sql = "update users set user_name=?, email=?,password=?,address=?,phone=?,money=? where user_id=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getUser_name());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getPassword());
+			pstmt.setString(4, dto.getAddress());
+			pstmt.setString(5, dto.getPhone());
+			pstmt.setInt(6, dto.getMoney());
+			pstmt.setString(7, dto.getUser_id());
+			
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.err.println("사용자 수정 에러 ::: " + e.getMessage());
+		} finally {
+			closeConn(pstmt, con);
+		}
+		return result;
+	}
+
+	//관리자 페이지 - 회원 검색
+	public List<UserDTO> searchUserList(String field, String keyword) {
+		List<UserDTO> list = new ArrayList<UserDTO>();
+		
+		try {
+			openConn();
+			sql = "select * from users";
+
+			if(field.equals("user_name")) {//검색 대상이 제목
+				sql += " where user_name like ?";
+			}else if(field.equals("user_id")) {//검색 대상이 줄거리
+				sql += " where user_id like ?";
+			}else if(field.equals("addr")) {//검색 대상이 저자
+				sql += " where address like ?";
+			}
+			
+			sql += "order by user_id desc";
+			
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, "%"+keyword+"%");
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				UserDTO dto = new UserDTO();
+				dto.setUser_id(rs.getString("user_id"));
+				dto.setUser_name(rs.getString("user_name"));
+				dto.setEmail(rs.getString("email"));
+				dto.setAddress(rs.getString("address"));
+				dto.setPassword(rs.getString("password"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setGrade(rs.getInt("grade"));
+				dto.setMoney(rs.getInt("money"));
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			System.err.println("사용자 검색 에러 ::: " + e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return list;
+	}
+
+	//사용자가 담은 물건 장바구니 테이블에 추가
+	public int addCart(CartDTO dto) {
+		int result=0,count=0;
+		
+		try {
+			openConn();
+			
+			sql = "select max(cart_id) from cart";
+			
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				count=rs.getInt(1)+1;
+			}
+			sql = "insert into cart values(?,?,?,?)";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, count);
+			pstmt.setString(2, dto.getUser_id());
+			pstmt.setInt(3, dto.getBook_id());
+			pstmt.setInt(4, dto.getQuantity());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.err.println("장바구니 담기 에러 ::: " + e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return result;
+	}
+	
+	//사용자 - 장바구니 목록 조회
+	public List<CartDTO> getCart(String user_id) {
+		List<CartDTO> list = new ArrayList<CartDTO>();
+		
+		try {
+			openConn();
+			
+			sql = "select c.cart_id a, b.title b, c.quantity c, b.price d, b.image_url e from "
+					+ "cart c join books b on c.book_id=b.book_id where c.user_id = ?";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, user_id);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				CartDTO dto = new CartDTO();
+				
+				dto.setCart_id(rs.getInt("a"));
+				dto.setTitle(rs.getString("b"));
+				dto.setQuantity(rs.getInt("c"));
+				dto.setPrice(rs.getInt("d"));
+				dto.setImage_url(rs.getString("e"));
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			System.err.println("장바구니 목록 조회 에러 :: " + e.getMessage());
+		} finally {
+			closeConn(rs, pstmt, con);
+		}
+		return list;
+	}
 }
+

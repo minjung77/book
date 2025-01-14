@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,119 +32,42 @@
 </head>
 <body>
 <%@ include file="navbar.jsp" %>
+<c:set var="list" value="${bookList }"></c:set>
 <!-- Blog Start -->
     <div class="container py-5">
         <div class="row g-5">
             <!-- Blog list Start -->
             <div class="col-lg-8">
-                <div class="blog-item mb-5">
-                    <div class="row g-0 bg-light overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="${pageContext.request.contextPath}/resource/img/blog-1.jpg" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Web Design</small>
-                                    <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
-                                </div>
-                                <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                <a class="text-primary text-uppercase" href="detail.jsp">Read More<i class="bi bi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="blog-item mb-5">
-                    <div class="row g-0 bg-light overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="${pageContext.request.contextPath}/resource/img/blog-2.jpg" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Web Design</small>
-                                    <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
-                                </div>
-                                <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                <a class="text-primary text-uppercase" href="detail.jsp">Read More<i class="bi bi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="blog-item mb-5">
-                    <div class="row g-0 bg-light overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="${pageContext.request.contextPath}/resource/img/blog-1.jpg" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Web Design</small>
-                                    <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
-                                </div>
-                                <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                <a class="text-primary text-uppercase" href="detail.jsp">Read More<i class="bi bi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="blog-item mb-5">
-                    <div class="row g-0 bg-light overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="${pageContext.request.contextPath}/resource/img/blog-2.jpg" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Web Design</small>
-                                    <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
-                                </div>
-                                <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                <a class="text-primary text-uppercase" href="detail.jsp">Read More<i class="bi bi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="blog-item mb-5">
-                    <div class="row g-0 bg-light overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="${pageContext.request.contextPath}/resource/img/blog-1.jpg" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Web Design</small>
-                                    <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
-                                </div>
-                                <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                <a class="text-primary text-uppercase" href="detail.jsp">Read More<i class="bi bi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="blog-item mb-5">
-                    <div class="row g-0 bg-light overflow-hidden">
-                        <div class="col-12 col-sm-5 h-100">
-                            <img class="img-fluid h-100" src="${pageContext.request.contextPath}/resource/img/blog-2.jpg" style="object-fit: cover;">
-                        </div>
-                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
-                            <div class="p-4">
-                                <div class="d-flex mb-3">
-                                    <small class="me-3"><i class="bi bi-bookmarks me-2"></i>Web Design</small>
-                                    <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
-                                </div>
-                                <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                <a class="text-primary text-uppercase" href="detail.jsp">Read More<i class="bi bi-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+			<c:if test="${empty bookList }">
+				<div><h3>책 목록이 없습니다.</h3></div>
+			</c:if>      
+			
+			
+			<c:if test="${!empty bookList }">
+				<c:forEach items="${list }" var="dto">
+	                <div class="blog-item mb-5">
+	                    <div class="row g-0 bg-light overflow-hidden">
+	                        <div class="col-12 col-sm-5 h-100">
+	                            <img class="img-fluid h-100" src="../admin${dto.getImage_url() }" style="object-fit: cover;">
+	                        </div>
+	                        <div class="col-12 col-sm-7 h-100 d-flex flex-column justify-content-center">
+	                            <div class="p-4">
+	                                <div class="d-flex mb-3">
+	                                    <small class="me-3"><i class="bi bi-bookmark-heart" style="margin-right: 10px;"></i>좋아요</small>
+	                                    <small><i>출판사 :</i> &nbsp; ${dto.getPublisher() }</small>
+	                                </div>
+	                                <h5 class="text-uppercase mb-3">${dto.getTitle() }</h5>
+	                                <p>${dto.getDescription() }</p>
+	                                <a class="text-primary text-uppercase" href="bookDetail.go?id=${dto.getBook_id() }">더보기<i class="bi bi-chevron-right"></i></a>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </c:forEach>
+                
+			</c:if>            	
+                
                 <div class="col-12">
                     <nav aria-label="Page navigation">
                       <ul class="pagination pagination-lg m-0">
@@ -176,86 +100,6 @@
                     </div>
                 </div>
                 <!-- Search Form End -->
-
-                <!-- Category Start -->
-                <div class="mb-5">
-                    <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Categories</h3>
-                    <div class="d-flex flex-column justify-content-start">
-                        <a class="h5 bg-light py-2 px-3 mb-2" href="#"><i class="bi bi-arrow-right me-2"></i>Web Design</a>
-                        <a class="h5 bg-light py-2 px-3 mb-2" href="#"><i class="bi bi-arrow-right me-2"></i>Web Development</a>
-                        <a class="h5 bg-light py-2 px-3 mb-2" href="#"><i class="bi bi-arrow-right me-2"></i>Web Development</a>
-                        <a class="h5 bg-light py-2 px-3 mb-2" href="#"><i class="bi bi-arrow-right me-2"></i>Keyword Research</a>
-                        <a class="h5 bg-light py-2 px-3 mb-2" href="#"><i class="bi bi-arrow-right me-2"></i>Email Marketing</a>
-                    </div>
-                </div>
-                <!-- Category End -->
-
-                <!-- Recent Post Start -->
-                <div class="mb-5">
-                    <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Recent Post</h3>
-                    <div class="d-flex overflow-hidden mb-3">
-                        <img class="img-fluid" src="${pageContext.request.contextPath}/resource/img/blog-1.jpg" style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                        <a href="" class="h5 d-flex align-items-center bg-light px-3 mb-0">Lorem ipsum dolor sit amet adipis elit
-                        </a>
-                    </div>
-                    <div class="d-flex overflow-hidden mb-3">
-                        <img class="img-fluid" src="${pageContext.request.contextPath}/resource/img/blog-2.jpg" style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                        <a href="" class="h5 d-flex align-items-center bg-light px-3 mb-0">Lorem ipsum dolor sit amet adipis elit
-                        </a>
-                    </div>
-                    <div class="d-flex overflow-hidden mb-3">
-                        <img class="img-fluid" src="${pageContext.request.contextPath}/resource/img/blog-3.jpg" style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                        <a href="" class="h5 d-flex align-items-center bg-light px-3 mb-0">Lorem ipsum dolor sit amet adipis elit
-                        </a>
-                    </div>
-                    <div class="d-flex overflow-hidden mb-3">
-                        <img class="img-fluid" src="${pageContext.request.contextPath}/resource/img/blog-1.jpg" style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                        <a href="" class="h5 d-flex align-items-center bg-light px-3 mb-0">Lorem ipsum dolor sit amet adipis elit
-                        </a>
-                    </div>
-                    <div class="d-flex overflow-hidden mb-3">
-                        <img class="img-fluid" src="${pageContext.request.contextPath}/resource/img/blog-2.jpg" style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                        <a href="" class="h5 d-flex align-items-center bg-light px-3 mb-0">Lorem ipsum dolor sit amet adipis elit
-                        </a>
-                    </div>
-                </div>
-                <!-- Recent Post End -->
-
-                <!-- Image Start -->
-                <div class="mb-5">
-                    <img src="${pageContext.request.contextPath}/resource/img/blog-1.jpg" alt="" class="img-fluid rounded">
-                </div>
-                <!-- Image End -->
-
-                <!-- Tags Start -->
-                <div class="mb-5">
-                    <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Tag Cloud</h3>
-                    <div class="d-flex flex-wrap m-n1">
-                        <a href="" class="btn btn-primary m-1">Design</a>
-                        <a href="" class="btn btn-primary m-1">Development</a>
-                        <a href="" class="btn btn-primary m-1">Marketing</a>
-                        <a href="" class="btn btn-primary m-1">SEO</a>
-                        <a href="" class="btn btn-primary m-1">Writing</a>
-                        <a href="" class="btn btn-primary m-1">Consulting</a>
-                        <a href="" class="btn btn-primary m-1">Design</a>
-                        <a href="" class="btn btn-primary m-1">Development</a>
-                        <a href="" class="btn btn-primary m-1">Marketing</a>
-                        <a href="" class="btn btn-primary m-1">SEO</a>
-                        <a href="" class="btn btn-primary m-1">Writing</a>
-                        <a href="" class="btn btn-primary m-1">Consulting</a>
-                    </div>
-                </div>
-                <!-- Tags End -->
-
-                <!-- Plain Text Start -->
-                <div>
-                    <h3 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Plain Text</h3>
-                    <div class="bg-light p-4">
-                        <p>Inspirational quotes and motivational texts go here!</p>
-                    </div>
-                </div>
-                <!-- Plain Text End -->
-
             </div>
             <!-- Sidebar End -->
         </div>
