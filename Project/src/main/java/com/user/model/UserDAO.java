@@ -491,7 +491,7 @@ public class UserDAO {
 		try {
 			openConn();
 			
-			sql = "select c.cart_id a, b.title b, c.quantity c, b.price d, b.image_url e from "
+			sql = "select c.cart_id a, b.title b, c.quantity c, b.price d, b.image_url e, c.book_id f from "
 					+ "cart c join books b on c.book_id=b.book_id where c.user_id = ?";
 			
 			pstmt = con.prepareStatement(sql);
@@ -507,6 +507,7 @@ public class UserDAO {
 				dto.setQuantity(rs.getInt("c"));
 				dto.setPrice(rs.getInt("d"));
 				dto.setImage_url(rs.getString("e"));
+				dto.setBook_id(rs.getInt("f"));
 				
 				list.add(dto);
 			}
@@ -517,5 +518,96 @@ public class UserDAO {
 		}
 		return list;
 	}
-}
 
+	public int deleteEachCart(int cart_id) {
+		int result = 0;
+		
+		try {
+			openConn();
+			
+			sql = "delete from cart where cart_id = ?";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, cart_id);
+			
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.err.println("장바구니 상품 개별 삭제 에러 :: " + e.getMessage());
+		} finally {
+			closeConn(pstmt, con);
+		}
+		return result;
+	}
+
+	//사용자 - 선택 장바구니 목록 삭제
+	public int checkCartDelete(String id) {
+		int result = 0;
+		
+		try {
+			openConn();
+			
+			sql = "delete from cart where cart_id in (?)";
+			
+			System.out.println("삭제할 장바구니 id :: "+id);
+			
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, id);
+			
+			result = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.err.println("사용자 장바구니 삭제 에러 ::: "+ e.getMessage());
+		} finally {
+			closeConn(pstmt, con);
+		}
+		return result;
+	}
+	//예치금 업데이트 메서드
+	public boolean updateMoney(UserDTO user) {
+		openConn();
+		
+		int count=0;
+		
+		try {
+			sql="update users set money =? where user_id=?";
+			
+			pstmt=con.prepareStatement(sql);
+			
+			pstmt.setInt(1, user.getMoney());
+			pstmt.setString(2, user.getUser_id());
+			
+			count= pstmt.executeUpdate();
+			return count>0;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConn(pstmt, con);
+		}
+		return false;
+		
+	}
+	
+	// 예치금 업데이트 메서드
+	public void updateUserMoney(String userId, int newMoney) {
+	    openConn();
+
+	    try {
+	        String sql = "UPDATE users SET money = ? WHERE user_id = ?";
+	        pstmt = con.prepareStatement(sql);
+
+	        pstmt.setInt(1, newMoney);
+	        pstmt.setString(2, userId);
+
+	        int rowsUpdated = pstmt.executeUpdate();
+
+	        if (rowsUpdated == 0) {
+	            System.out.println("사용자 정보 업데이트 실패: 존재하지 않는 사용자 ID");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeConn(rs, pstmt, con);
+	    }
+	}
+}

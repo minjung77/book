@@ -22,6 +22,8 @@ public class BookDetailAction implements Action {
 		BookDAO dao = BookDAO.getInstance();
 		BookDTO dto = dao.getBookDetail(book_id);
 		
+		dao.BookHitUpdate(book_id);
+		
 		request.setAttribute("bookDetail", dto);
 		
 		ActionForward f = new ActionForward();

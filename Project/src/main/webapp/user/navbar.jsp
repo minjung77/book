@@ -100,9 +100,10 @@
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">장르</a>
             <div class="dropdown-menu">
-                <a href="totalNovel.go" class="dropdown-item">소설</a>
-                <a href="nonFiction.jsp" class="dropdown-item">비소설</a>
-                <a href="fantasy.jsp" class="dropdown-item">판타지</a>
+                <a href="fantasy.jsp" class="dropdown-item">소설</a>
+                <a href="fantasy.jsp" class="dropdown-item">에세이</a>
+                <a href="totalNovel.go" class="dropdown-item">역사</a>
+                <a href="nonFiction.jsp" class="dropdown-item">자연과학</a>
             </div>
         </div>
 
@@ -129,7 +130,8 @@
                         <a href="cartList.go" class="dropdown-item">장바구니</a>
                     </div>
                 </div>
-                <a href="orderConfirmation.jsp" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">주문하기 <i class="bi bi-arrow-right"></i></a>
+                <a href="<%= request.getContextPath() %>/user/orderConfirmation.jsp" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">주문하기 <i class="bi bi-arrow-right"></i></a>
+             
             </div>
         </div>
     </nav>

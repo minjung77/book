@@ -388,4 +388,26 @@ public class BookDAO {
 		}
 		return dto;
 	}
+
+	//상세보기 클릭 시 책의 조회수(hit) 클릭
+	public void BookHitUpdate(int book_id) {
+		int result = 0;
+		try {
+			openConn();
+			
+			sql = "update books set hit = hit + 1 where book_id = ?";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, book_id);
+			
+			result = pstmt.executeUpdate();
+			
+			System.out.println("조회수 상승 결과 ::: " + result);
+			
+		} catch (Exception e) {
+			System.err.println("조회수 상승 에러 " + e.getMessage());
+		} finally {
+			closeConn(pstmt, con);
+		}
+	}
 }

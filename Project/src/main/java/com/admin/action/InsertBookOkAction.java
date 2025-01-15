@@ -22,7 +22,7 @@ public class InsertBookOkAction implements Action {
 		// 관리자 측 페이지에서 책을 추가하는 로직
 		// 이미지를 넣어야 하므로 MultipartRequest 객체 사용
 		
-		String saveFolder = "C:\\Users\\admin\\Desktop\\NCS\\NCS\\workspace(jsp)\\BookProject\\src\\main\\webapp\\img";
+		String saveFolder = "C:\\Users\\admin\\git\\book33\\Project\\src\\main\\webapp\\admin\\img";
 		int fileSize = 10 * 1024 * 1024;//10MB
 		
 		MultipartRequest multi = new MultipartRequest(request, saveFolder, fileSize, "utf-8", new DefaultFileRenamePolicy());
@@ -44,6 +44,9 @@ public class InsertBookOkAction implements Action {
 		BookDTO dto = new BookDTO();
 		
 		if(image_file!=null) {//이미지 파일이 있으면
+			
+			System.err.println("이미지 파일이 있으면");
+			
 			String fileName = image_file.getName();
 			
 			//파일 명 : 책 제목_파일명
@@ -53,7 +56,7 @@ public class InsertBookOkAction implements Action {
 			image_file.renameTo(new File(saveFolder+"/"+reFileName));
 			
 			//DB에 들어갈 파일 이름/[/2024-12-27/책이름-파일이름]
-			String fileDBName = "/" + reFileName;
+			String fileDBName = "/img/" + reFileName;
 			
 			dto.setImage_url(fileDBName);
 		}

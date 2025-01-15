@@ -44,8 +44,8 @@ img{
             <input type="checkbox" id="allChk" checked> <b>전체</b>
         </div>
         <div class="col-md-6 text-end">
-            <a href=" "class="btn btn-danger btn-sm" onclick="location.href='cartDelete.go'">삭제하기</a>
-            <a href="orderConfirmation.jsp" class="btn btn-success btn-sm" onclick="location.href='cartOrder.go'">주문하기</a>
+            <a href="javascript:void(0)"class="btn btn-danger btn-sm" onclick="checkDeleteList()">삭제하기</a>
+            <a href="<%=request.getContextPath() %>/user_order.go?user_id=${user.user_id}" class="btn btn-success btn-sm">주문하기</a>
         </div>
     </div>
     
@@ -67,7 +67,7 @@ img{
             	<c:if test="${!empty cartList }">
 	                <c:forEach var="dto" items="${list}">
 	                    <tr>
-	                        <td><input type="checkbox" class="chk" checked data-totalprice="${dto.getQuantity() * dto.getPrice() }"></td>
+	                        <td><input type="checkbox" class="chk" name="chk" value="${dto.getCart_id() }" checked data-totalprice="${dto.getQuantity() * dto.getPrice() }"></td>
 	                        <th style="text-align: center;">
 	                        	<img alt="책 이미지" src="../admin/${dto.getImage_url() }">
 	                        </th>
@@ -76,7 +76,7 @@ img{
 	                        <td>${dto.getQuantity() }</td>
 	                        <td>${dto.getQuantity() * dto.getPrice() }</td>
 	                        <td>
-	                            <a href="./removeCart.jsp?id=${product.bookID}" class="btn btn-outline-danger btn-sm">
+	                            <a href="<%=request.getContextPath() %>/removeCart.go?cart=${dto.getCart_id() }" class="btn btn-outline-danger btn-sm">
 	                                <i class="bi bi-backspace-fill"></i> 삭제
 	                            </a>
 	                        </td>
@@ -111,38 +111,66 @@ img{
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // 전체 선택/해제 기능
-    document.getElementById("allChk").addEventListener("click", function () {
-        const isChecked = this.checked;
-        document.querySelectorAll(".chk").forEach(chk => {
-            chk.checked = isChecked;
-        });
-        totalMoney();
-    });
-    
-    function totalMoney() {
-    	console.log('전체 계산 진입');
-		let result = 0;
-		let checks = document.querySelectorAll('.chk');
-		
-		checks.forEach(checkBox => {
-			if(checkBox.checked){
-				result += parseInt(checkBox.getAttribute('data-totalprice'));
-			}
+	window.onload = () => {
+		document.getElementById("allChk").addEventListener("click", function () {
+		const isChecked = this.checked;
+		document.querySelectorAll(".chk").forEach(chk => {
+			chk.checked = isChecked;
 		});
-		document.getElementById('totalMoney').textContent = result;
-	};
+		});
+	    totalMoney();
+	}
+  
+	function totalMoney() {
+	console.log('전체 계산 진입');
+	let result = 0;
+	let checks = document.querySelectorAll('.chk');
 	
-    window.addEventListener('load', () => {
-        totalMoney(); // 페이지 로드 후 초기 계산
-    });
+	checks.forEach(checkBox => {
+		if(checkBox.checked){
+			result += parseInt(checkBox.getAttribute('data-totalprice'));
+		}
+	});
+	document.getElementById('totalMoney').textContent = result;
+	};
 	
 	document.querySelectorAll('.chk').forEach(checkBox => {
 		console.log('선택 이벤트 진입');
 		checkBox.addEventListener('change', totalMoney);
 	});
-	/* ----------------------------함수 호출과 참조의 차이(함수참조)------------------------------- */
+	
+	//선택한 책 삭제
+	function checkDeleteList() {
+		let checkedBoxs =  document.querySelectorAll(".chk:checked");
+		let selectedIds = Array.from(checkedBoxs).map(checkbox => checkbox.value).filter(value => value);
+		
+		/* 
+		let checkboxes = document.getElementsByClassName('chk');
+		Array.from(checkboxes).forEach(checkbox => {
+		    console.log(checkbox.value); 
+		}); 
+		*/
+		//length:속성,괄호를 붙이지 않음.
+		if(selectedIds.length === 0){
+			alert('삭제할 책을 선택해주세요.');
+			return;
+		}else {
+			console.log(selectedIds);
+			/* parameters 가 왜 안나오는거야ㅛ!!!!! */
+//			let parameters = selectedIds.map(a => `id=${a}`);//id=&id=
+//			alert(parameters);
+//			console.log(parameters);
+			let b = selectedIds.join(',');//3,4
+			console.log(b);
+			
+			location.href='<%=request.getContextPath()%>checkDeleteCart.go?num='+b;
+		}
+	}
+	
+/* 나중에 개별 삭제 ajax로 해보기 */
 </script>
 </body>
 </html>

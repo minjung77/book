@@ -36,7 +36,7 @@
             <button type="submit" class="btn btn-primary">정보 수정</button>
         </form>
 
-        <a href="<%=request.getContextPath() %>/mypage.go" class="btn btn-secondary mt-2">취소</a>
+        <a href="<%=request.getContextPath() %>/user/mypage.jsp" class="btn btn-secondary mt-2">취소</a>
     </div>
 
 <%@ include file="footer.jsp"%>

@@ -47,7 +47,7 @@
 						<tr>
 							<td>${dto.getBook_id() }</td>
 							<td>
-								<img alt="책 이미지" src="/img${dto.getImage_url() }">
+								<img alt="책 이미지" src="${dto.getImage_url() }">
 							</td>
 							<td>${dto.getTitle() }</td>
 							<td>${dto.getAuthor() }</td>

@@ -25,7 +25,7 @@ public class BookUpdateAction implements Action {
 		
 		int page = Integer.parseInt(request.getParameter("page").trim());
 		
-		String saveFolder = "C:\\Users\\admin\\Desktop\\NCS\\NCS\\workspace(jsp)\\BookProject\\src\\main\\webapp\\img";
+		String saveFolder = "C:\\Users\\admin\\git\\book33\\Project\\src\\main\\webapp\\admin\\img";
 		int fileSize = 10 * 1024 * 1024;//10MB
 		
 		MultipartRequest multi = new MultipartRequest(request, saveFolder, fileSize, "utf-8", new DefaultFileRenamePolicy());
@@ -52,18 +52,20 @@ public class BookUpdateAction implements Action {
 		if(image_file!=null) {//이미지 파일이 있으면
 			String fileName = image_file.getName();
 			
+			System.err.println("이미지 파일이 있으면");
+			
 			//파일 명 : 책 제목_파일명
 			String reFileName = title + "_" + fileName;
 
 			//파일을 새로운 경로로 이동시키는 동시게 파일 이름을 변경(renameTo("파일이름")))
-			image_file.renameTo(new File("/"+reFileName));
+			image_file.renameTo(new File(saveFolder+reFileName));
 			
 			//DB에 들어갈 파일 이름/[/2024-12-27/책이름-파일이름]
-			String fileDBName = "/" + reFileName;
+			String fileDBName = "/img/" + reFileName;
 			
 			dto.setImage_url(fileDBName);
 			
-			System.out.println("db img :: "+fileDBName);
+			System.err.println("db img :: "+fileDBName);
 		}
 		dto.setBook_id(book_id);
 		dto.setTitle(title);

@@ -43,8 +43,8 @@
                 <!-- 세션에 저장된 user 정보 확인 -->
                <c:if test="${not empty sessionScope.user}">
 			    <p><strong>이름:</strong> ${sessionScope.user.user_name}</p>
-			    <p><strong>이메일:</strong> ${sessionScope.user.email}</p>
 			    <p><strong>전화번호:</strong> ${sessionScope.user.phone}</p>
+			     <p><strong>현재 잔액:</strong> ${sessionScope.user.money}</p>
 			</c:if>
 			
 			<c:if test="${empty sessionScope.user}">
@@ -54,11 +54,10 @@
                 
                 <div class="btn-container">
               
-				<a href="<%=request.getContextPath() %>/user/updatePage.jsp" class="btn btn-danger btn-sm">정보 변경</a>
+			<a href="<%=request.getContextPath() %>/user/updatePage.jsp" class="btn btn-primary btn-sm">정보 변경</a>
 			<a href="<%=request.getContextPath() %>/user/deletePage.jsp" class="btn btn-danger btn-sm">회원 탈퇴</a>
-			
-                    
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#depositModal">돈 예치</button>
+			<a href="<%=request.getContextPath() %>/user/depositPage.jsp" class="btn btn-success btn-sm">충전하기</a>
+                       
                 </div>
             </div>
         </div>
